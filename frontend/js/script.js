@@ -7,22 +7,29 @@ let date = document.querySelector('.date'),
     rate_severe_symptoms = document.querySelector('.rate_severe_symptoms'),
     rate_deaths = document.querySelector('.rate_deaths');
 
-(function () {
-    var xhr = new XMLHttpRequest();
-    xhr.open(
-        "GET", 
-        "http://localhost:3000/proxy?",
-        false);
-    xhr.send();
-
-    co = JSON.parse(xhr.responseText);
-    console.log(co.response.result[0]);
-    
-    let covid=co.response.result[0];
+    fetch("http://localhost:3000/proxy")
+    .then ((response)=> {          //성공하면 호출
+        return response.json();                        // 응답한걸 텍스트로변환(텍스트를 처리할 프로미스 객체)
+    })
+    .then((arr)=> {                            //변환한 텍스트를 받음
+    console.log(arr);
+    console.log(arr.response.result[0]);        
+    let covid = arr.response.result[0];
     console.log(covid);
+
+        // var xhr = new XMLHttpRequest();
+    // xhr.open(
+    //     "GET", 
+    //     "http://localhost:3000/proxy?",
+    //     false);
+    // xhr.send();
+
+    // co = JSON.parse(xhr.responseText);
+    // console.log(co.response.result[0]);
     
-    //숫자 1000단위당 ,찍음  (/\B(?=(\d{3})+(?!\d))/g, ',')
-    
+    // let covid=co.response.result[0];
+    // console.log(covid);
+
     let  mmddhh = covid.mmddhh.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     document.querySelector('.date').innerHTML = `${mmddhh} 기준`;
 
@@ -47,15 +54,7 @@ let date = document.querySelector('.date'),
     let  rate_deaths = covid.rate_deaths.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     document.querySelector('.rate_deaths').innerHTML = `${rate_deaths}`;
 
-    
-
-    
-})();     
-    
-
-  
-
-    
+});
     // console.log("데이터 조회 기준 일:" + mmddhh);
     
     // console.log("일일 신규입원:" + cnt_hospitalizations);
@@ -65,6 +64,9 @@ let date = document.querySelector('.date'),
     // console.log("인구 10만명당 신규 입원:" + rate_hospitalizations);
     // console.log("인구 10만명당 재원 위중증:" + rate_severe_symptoms);
     // console.log("인구 10만명당 사망:" + rate_deaths);
+    //숫자 1000단위당 ,찍음  (/\B(?=(\d{3})+(?!\d))/g, ',')
+    
+
        
 // function getToday() {
 //   const date = new Date();
